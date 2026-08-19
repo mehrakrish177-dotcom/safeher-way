@@ -2,11 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { ShieldAlert } from "lucide-react";
 import { toast } from "sonner";
 import { useSafeHer } from "@/lib/safeher-store";
+import { cn } from "@/lib/utils";
 
 const HOLD_MS = 3000;
+const R = 76;
+const C = 2 * Math.PI * R;
 
 export function SosButton() {
-  const { contacts, logEvent, setSharingLocation } = useSafeHer();
+  const { contacts, logEvent, setSharingLocation, setEmergencyActive } = useSafeHer();
   const [progress, setProgress] = useState(0);
   const [fired, setFired] = useState(false);
   const raf = useRef<number | null>(null);
@@ -27,7 +30,10 @@ export function SosButton() {
       stop();
       setFired(true);
       setSharingLocation(true);
-      logEvent("sos", `SOS alert sent to ${contacts.length} emergency contacts`);
+      setEmergencyActive(true);
+      logEvent("sos", "SOS alert activated — emergency mode engaged");
+      logEvent("sos", "GPS Coordinates Sent");
+      logEvent("sos", `Emergency Contacts Notified (${contacts.length})`);
       toast.error("SOS triggered", {
         description: `Simulated alert + live location sent to ${contacts.length} contacts.`,
       });
@@ -43,10 +49,27 @@ export function SosButton() {
     raf.current = requestAnimationFrame(tick);
   };
 
+  const dashOffset = C - progress * C;
+
   return (
     <div className="flex flex-col items-center gap-3">
       <div className="relative grid place-items-center">
-        <span className="absolute h-52 w-52 rounded-full bg-sos/25 pulse-ring" aria-hidden />
+        <span className={cn("absolute h-52 w-52 rounded-full bg-sos/25", progress > 0 ? "pulse-ring" : "")} aria-hidden />
+        <svg className="pointer-events-none absolute h-56 w-56 -rotate-90" viewBox="0 0 176 176" aria-hidden>
+          <circle cx="88" cy="88" r={R} fill="none" stroke="currentColor" strokeWidth="6" className="text-sos/15" />
+          <circle
+            cx="88"
+            cy="88"
+            r={R}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="6"
+            strokeLinecap="round"
+            className="text-sos-foreground transition-all duration-75"
+            strokeDasharray={C}
+            strokeDashoffset={dashOffset}
+          />
+        </svg>
         <button
           type="button"
           aria-label="Hold for 3 seconds to trigger SOS"
@@ -56,9 +79,6 @@ export function SosButton() {
           onPointerCancel={stop}
           onContextMenu={(e) => e.preventDefault()}
           className="relative h-44 w-44 touch-none select-none rounded-full surface-sos transition-transform active:scale-95"
-          style={{
-            backgroundImage: `conic-gradient(color-mix(in oklab, white 45%, transparent) ${progress * 360}deg, transparent 0deg), var(--gradient-sos)`,
-          }}
         >
           <span className="flex flex-col items-center gap-1.5">
             <ShieldAlert className="h-9 w-9" />
