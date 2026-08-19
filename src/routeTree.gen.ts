@@ -10,12 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CommunityRouteImport } from './routes/community'
+import { Route as NetworkRouteImport } from './routes/network'
 import { Route as RoutesRouteImport } from './routes/routes'
 import { Route as ToolkitRouteImport } from './routes/toolkit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NetworkRoute = NetworkRouteImport.update({
+  id: '/network',
+  path: '/network',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RoutesRoute = RoutesRouteImport.update({
@@ -31,30 +43,38 @@ const ToolkitRoute = ToolkitRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/community': typeof CommunityRoute
+  '/network': typeof NetworkRoute
   '/routes': typeof RoutesRoute
   '/toolkit': typeof ToolkitRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/community': typeof CommunityRoute
+  '/network': typeof NetworkRoute
   '/routes': typeof RoutesRoute
   '/toolkit': typeof ToolkitRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/community': typeof CommunityRoute
+  '/network': typeof NetworkRoute
   '/routes': typeof RoutesRoute
   '/toolkit': typeof ToolkitRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/routes' | '/toolkit'
+  fullPaths: '/' | '/community' | '/network' | '/routes' | '/toolkit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/routes' | '/toolkit'
-  id: '__root__' | '/' | '/routes' | '/toolkit'
+  to: '/' | '/community' | '/network' | '/routes' | '/toolkit'
+  id: '__root__' | '/' | '/community' | '/network' | '/routes' | '/toolkit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CommunityRoute: typeof CommunityRoute
+  NetworkRoute: typeof NetworkRoute
   RoutesRoute: typeof RoutesRoute
   ToolkitRoute: typeof ToolkitRoute
 }
@@ -66,6 +86,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/network': {
+      id: '/network'
+      path: '/network'
+      fullPath: '/network'
+      preLoaderRoute: typeof NetworkRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/routes': {
@@ -87,6 +121,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CommunityRoute: CommunityRoute,
+  NetworkRoute: NetworkRoute,
   RoutesRoute: RoutesRoute,
   ToolkitRoute: ToolkitRoute,
 }
