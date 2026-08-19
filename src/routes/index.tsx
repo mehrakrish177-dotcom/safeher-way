@@ -35,7 +35,7 @@ function Dashboard() {
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 sm:flex sm:justify-between">
           <div className="min-w-0">
             <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Good evening, Riya</p>
-            <h1 className="mt-1 truncate text-2xl font-bold tracking-tight sm:text-3xl">
+            <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
               You&apos;re covered tonight
             </h1>
           </div>
