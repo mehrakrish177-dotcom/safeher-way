@@ -189,6 +189,7 @@ export function SafeHerProvider({ children }: { children: ReactNode }) {
   const [sharingLocation, setSharingLocation] = useState(false);
   const [recording, setRecording] = useState(false);
   const [sirenOn, setSirenOn] = useState(false);
+  const [emergencyActive, setEmergencyActive] = useState(false);
   const [events, setEvents] = useState<AlertEvent[]>([
     { id: "e1", kind: "checkin", message: "Evening check-in confirmed", at: "Yesterday, 10:42 PM" },
     { id: "e2", kind: "location", message: "Live location shared with Meera Kapoor", at: "Yesterday, 9:58 PM" },
@@ -214,6 +215,8 @@ export function SafeHerProvider({ children }: { children: ReactNode }) {
       setRecording,
       sirenOn,
       setSirenOn,
+      emergencyActive,
+      setEmergencyActive,
       events,
       logEvent: (kind, message) =>
         setEvents((prev) => [
@@ -226,7 +229,7 @@ export function SafeHerProvider({ children }: { children: ReactNode }) {
           ...prev,
         ]),
     }),
-    [contacts, posts, pins, sharingLocation, recording, sirenOn, events],
+    [contacts, posts, pins, sharingLocation, recording, sirenOn, emergencyActive, events],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
