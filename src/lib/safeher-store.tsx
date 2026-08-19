@@ -174,6 +174,8 @@ type StoreValue = {
   setRecording: (v: boolean) => void;
   sirenOn: boolean;
   setSirenOn: (v: boolean) => void;
+  emergencyActive: boolean;
+  setEmergencyActive: (v: boolean) => void;
   events: AlertEvent[];
   logEvent: (kind: AlertEvent["kind"], message: string) => void;
 };
